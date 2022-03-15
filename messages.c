@@ -21,6 +21,7 @@ void construire_message(char *message, char motif, int lg, int number) {
   sprintf(numf, "%*.*s%s", len, len, num, numc); // On construit l'indice du message avec les tirets 
   strncpy(message, numf, 5);    // On copie l'indice du message au début du message
   strcat(message, let);         // On concatène le reste du message
+  message[lg] = 0;
 }
 
 void utilisation_message() {
