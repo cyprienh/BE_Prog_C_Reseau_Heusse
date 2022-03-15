@@ -25,14 +25,18 @@ void construire_message(char *message, char motif, int lg, int number) {
 }
 
 void utilisation_message() {
-  printf("UTILISATION: tsock -p [options] port\n");
-  printf("             tsock -s [options] adresse port\n");
+  printf("UTILISATION: tsock [options] -c port\n");
+  printf("UTILISATION: tsock [options] -s port\n");
   printf("\n");
   printf("OPTIONS:\n");
-  printf("    -l ## : Longueur de chaque message à envoyer en octets (défaut: 30)\n");
-  printf("            Compatible avec -p, -s\n");
-  printf("    -n ## : Nombre de messages à envoyer/recevoir (défaut: 10)\n");
-  printf("            Compatible avec -p, -s\n");
   printf("    -u    : Utiliser le protocole UDP (défaut: TCP) \n");
-  printf("            Compatible avec -p, -s\n");
+  printf("            Compatible avec -c, -s\n");
+  printf("    -e    : En TCP: Le client/serveur est aussi l'émetteur \n");
+  printf("            Compatible avec -c, -s\n");
+  printf("    -r    : En TCP: Le client/serveur est aussi le récepteur \n");
+  printf("            Compatible avec -c, -s\n");
+  printf("    -l ## : Longueur de chaque message à envoyer en octets (défaut: 30)\n");
+  printf("            Compatible avec -c, -s, -e, -r, -u\n");
+  printf("    -n ## : Nombre de messages à envoyer/recevoir (défaut: 10)\n");
+  printf("            Compatible avec -c, -s, -e, -r, -u\n");
 }
