@@ -250,9 +250,9 @@ void main (int argc, char **argv) {
         printf("SOURCE: lg_mesg_emis=%d, port=%d, nb_envois=%d, TP=%s, dest=%s\n", lg_message, port, nb_message, text_type, addr);
       } else if(source == 0) { //puit
         if(nb_message == -1)
-          printf("PUIT: lg_mesg_lu=%d, port=%d, nb_receptions=infini, TP=%s\n", lg_message, port, text_type, addr);
+          printf("PUIT: lg_mesg_lu=%d, port=%d, nb_receptions=infini, TP=%s\n", lg_message, port, text_type);
         else
-          printf("PUIT: lg_mesg_lu=%d, port=%d, nb_receptions=%d, TP=%s\n", lg_message, port, nb_message, text_type, addr);
+          printf("PUIT: lg_mesg_lu=%d, port=%d, nb_receptions=%d, TP=%s\n", lg_message, port, nb_message, text_type);
       }
 
       if(type == 1) {

@@ -57,7 +57,7 @@ int construire_source_udp(int sock, char* addr, int port, struct sockaddr_in *ad
 }
 
 int recevoir_messages_udp(int sock, struct sockaddr *padr_em, int number, int length) {
-  char* pmes = (char*)malloc(length);
+  char* pmes = (char*)malloc(length+1);
   int plg_adr_em = sizeof(padr_em);  
 
   int i=0;
@@ -65,6 +65,7 @@ int recevoir_messages_udp(int sock, struct sockaddr *padr_em, int number, int le
   while(number == -1 || (number != -1 && i < number)){
     i++;
     recvfrom(sock, pmes, length, 0, padr_em, &plg_adr_em);
+    pmes[length] = 0;
     printf("PUIT: Reception n°%-5d (%d) [%s]\n", i, length, pmes);
   }
 
@@ -74,7 +75,7 @@ int recevoir_messages_udp(int sock, struct sockaddr *padr_em, int number, int le
 void envoyer_messages_udp(int sock, struct sockaddr_in *adr_distant, int number, int length) {
   int lg_adr_distant = sizeof(*adr_distant);
 
-  char* msg = (char*)malloc(length);
+  char* msg = (char*)malloc(length+1);
   char motif = 'a';
 
   int current = 0;

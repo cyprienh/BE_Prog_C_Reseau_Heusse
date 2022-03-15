@@ -74,24 +74,26 @@ int construire_source_tcp(int sock, char* addr, int port, struct sockaddr_in *ad
 
 void recevoir_messages_tcp(int sock, int number, int length) {
   int lg_recu = -1;
-  char* msg = (char*)malloc(length);
+  char* msg = (char*)malloc(length+1);
 
   int i=0;
 
-  while((number == -1) || (number != -1 && i < number)){
+  while((number == -1 && lg_recu != 0) || (number != -1 && i < number)){
     i++;
     if ((lg_recu = read(sock, msg, length)) < 0) {
       printf("ERREUR: Échec de lecture des messages\n"); 
       exit(1);
     }
-    if(lg_recu == 0) break;
-    printf("PUIT: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+    if(lg_recu != 0) {
+      msg[length] = 0;
+      printf("PUIT: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+    }
   }
 
 }
 
 void envoyer_messages_tcp(int sock, int number, int length) {
-  char* msg = (char*)malloc(length);
+  char* msg = (char*)malloc(length+1);
   char motif = 'a';
 
   int current = 0;

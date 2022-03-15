@@ -18,41 +18,41 @@
 void recevoir_messages_serveur_bal(int sock, t_liste* utilisateurs, t_infos infos) {
   int lg_recu = -1;
 
-  for(int i=0; i<infos.lg_messages; i++){
-    char* msg = (char*)malloc(infos.lg_messages);
+  for(int i=0; i<infos.nb_messages || lg_recu == 0; i++){
+    char* msg = (char*)malloc(infos.lg_messages+1);
     t_message* msg_final = (t_message*)malloc(sizeof(t_message));
     // Réception des messages
     if ((lg_recu = read(sock, msg, infos.lg_messages)) < 0) {
       printf("ERREUR: Échec du read\n"); 
       exit(1);
     }
-    if(lg_recu == 0) break;
-
-    t_liste* liste;
-    t_listIterator iter = iterator(utilisateurs);
-    int trouve = 0;
-    while(hasNext(&iter) && trouve == 0) {
-      t_utilisateur* utilisateur = (t_utilisateur*)next(&iter);
-      if(utilisateur->dest == infos.destinataire) {
-        liste = utilisateur->liste;
-        trouve = 1;
+    if(lg_recu != 0) {
+      t_liste* liste;
+      t_listIterator iter = iterator(utilisateurs);
+      int trouve = 0;
+      while(hasNext(&iter) && trouve == 0) {
+        t_utilisateur* utilisateur = (t_utilisateur*)next(&iter);
+        if(utilisateur->dest == infos.destinataire) {
+          liste = utilisateur->liste;
+          trouve = 1;
+        }
       }
-    }
 
-    msg_final->message = msg;
-    msg_final->lg = infos.lg_messages;
+      msg_final->message = msg;
+      msg_final->lg = infos.lg_messages;
 
-    if(trouve) {  // Si l'utilisateur a déjà reçu du courier
-      printf("SERVEUR: Courier pour l'utilisateur: %d\n", infos.destinataire);
-      addLast(liste, msg_final); // On ajoute le courier à sa liste
-    } else {      // Si il n'a jamais reçu de courier
-      printf("SERVEUR: Nouvel utilisateur: %d\n", infos.destinataire);
-      t_liste* nouvelle_liste = init();
-      t_utilisateur* nouvel_utilisateur = (t_utilisateur*)malloc(sizeof(t_utilisateur));
-      nouvel_utilisateur->dest = infos.destinataire;
-      nouvel_utilisateur->liste = nouvelle_liste;
-      addLast(utilisateurs, nouvel_utilisateur);  // On l'ajoute à la liste des utilisateurs
-      addLast(nouvelle_liste, msg_final);         // On ajoute le courier à sa nouvelle liste
+      if(trouve) {  // Si l'utilisateur a déjà reçu du courier
+        printf("SERVEUR: Courier pour l'utilisateur: %d\n", infos.destinataire);
+        addLast(liste, msg_final); // On ajoute le courier à sa liste
+      } else {      // Si il n'a jamais reçu de courier
+        printf("SERVEUR: Nouvel utilisateur: %d\n", infos.destinataire);
+        t_liste* nouvelle_liste = init();
+        t_utilisateur* nouvel_utilisateur = (t_utilisateur*)malloc(sizeof(t_utilisateur));
+        nouvel_utilisateur->dest = infos.destinataire;
+        nouvel_utilisateur->liste = nouvelle_liste;
+        addLast(utilisateurs, nouvel_utilisateur);  // On l'ajoute à la liste des utilisateurs
+        addLast(nouvelle_liste, msg_final);         // On ajoute le courier à sa nouvelle liste
+      }
     }
   }
 }
@@ -112,7 +112,7 @@ void recevoir_messages_client_bal(int sock, t_infos infos) {
   }
 
   // Réception des messages
-  while(1) {
+  while(lg_recu != 0) {
     i++;
     int length;
     // Réception de la taille du message qui va suivre
@@ -120,22 +120,25 @@ void recevoir_messages_client_bal(int sock, t_infos infos) {
       printf("ERREUR: Échec du read\n"); 
       exit(1);
     }
-    char* msg = (char*)malloc(length);
+    char* msg = (char*)malloc(length+1);
     // Réception du message en lui-même
     if ((lg_recu = read(sock, msg, length)) < 0) {
       printf("ERREUR: Échec du read\n"); 
       exit(1);
     }
-    if(lg_recu == 0) break; // Si on ne reçoit plus rien, on quitte la boucle
-    printf("CLIENT: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+    if(lg_recu != 0) {
+      msg[length] = 0;
+      printf("CLIENT: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+    }
   }
+    
   if(i == 1) {
     printf("INFO: Pas de messages\n");
   }
 }
 
 void envoyer_messages_client_bal(int sock, t_infos infos) {
-  char* msg = (char*)malloc(infos.lg_messages);
+  char* msg = (char*)malloc(infos.lg_messages+1);
   char first[5] = "envoi";
   char motif = 'a';
 
