@@ -3,4 +3,6 @@
 
   void construire_message(char *message, char motif, int lg, int number);
 
+  void utilisation_message();
+
 #endif

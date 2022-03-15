@@ -76,6 +76,7 @@ void recevoir_messages_udp(int sock, struct sockaddr *padr_em, int number, int l
   while(number == -1 || (number != -1 && i < number)){
     i++;
     recvfrom(sock, pmes, length, 0, padr_em, &plg_adr_em);
+    pmes[length] = 0;
     printf("SERVEUR: Reception n°%-5d (%d) [%s]\n", i, length, pmes);
   }
 }

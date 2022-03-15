@@ -21,4 +21,18 @@ void construire_message(char *message, char motif, int lg, int number) {
   sprintf(numf, "%*.*s%s", len, len, num, numc);
   strncpy(message, numf, 5);
   strcat(message, let);
+  message[lg] = 0;
+}
+
+void utilisation_message() {
+  printf("UTILISATION: tsock -p [options] port\n");
+  printf("             tsock -s [options] adresse port\n");
+  printf("\n");
+  printf("OPTIONS:\n");
+  printf("    -l ## : Longueur de chaque message à envoyer en octets (défaut: 30)\n");
+  printf("            Compatible avec -p, -s\n");
+  printf("    -n ## : Nombre de messages à envoyer/recevoir (défaut: 10)\n");
+  printf("            Compatible avec -p, -s\n");
+  printf("    -u    : Utiliser le protocole UDP (défaut: TCP) \n");
+  printf("            Compatible avec -p, -s\n");
 }

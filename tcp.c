@@ -79,18 +79,19 @@ void recevoir_messages_tcp(int sock, int number, int length, int serveur) {
 
   int i=0;
 
-  while((number == -1) || (number != -1 && i < number)){
+  while((number == -1 && lg_recu != 0) || (number != -1 && i < number)){
     /* Réception des messages */
     i++;
     if ((lg_recu = read(sock, msg, length)) < 0) {
       printf("ERREUR: Échec du read\n"); 
       exit(1);
     }
-    if(lg_recu == 0) break;
-    if(serveur)
-      printf("SERVEUR: Reception n°%-5d (%d) [%s]\n", i, length, msg);
-    else
-      printf("CLIENT: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+    if(lg_recu != 0) {
+      if(serveur)
+        printf("SERVEUR: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+      else
+        printf("CLIENT: Reception n°%-5d (%d) [%s]\n", i, length, msg);
+    }
   }
 
 }

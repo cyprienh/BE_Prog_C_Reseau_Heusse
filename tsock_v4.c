@@ -23,6 +23,7 @@ données du réseau */
 
 #include "udp.h"
 #include "tcp.h"
+#include "messages.h"
 
 int serveur_udp(int port, int nb_msg, int lg_msg, int emetteur);
 int client_udp(char* addr, int port, int nb_msg, int lg_msg, int emetteur);
@@ -52,7 +53,7 @@ void main (int argc, char **argv) {
 		switch (c) {
       case 'c':
         if (client == 0) {
-          printf("USAGE: cmd [-c|-s][-e|-r][-u][-n ##][-l ##]\n");
+          utilisation_message();
           exit(1);
         }
         client = 1;
@@ -61,7 +62,7 @@ void main (int argc, char **argv) {
 
       case 's':
         if (client == 1) {
-          printf("USAGE: cmd [-c|-s][-e|-r][-u][-n ##][-l ##]\n");
+          utilisation_message();
           exit(1);
         }
         client = 0;
@@ -70,7 +71,7 @@ void main (int argc, char **argv) {
 
       case 'e':
         if (emetteur == 0) {
-          printf("USAGE: cmd [-c|-s][-e|-r][-u][-n ##][-l ##]\n");
+          utilisation_message();
           exit(1);
         }
         emetteur = 1;
@@ -79,7 +80,7 @@ void main (int argc, char **argv) {
 
       case 'r':
         if (emetteur == 1) {
-          printf("USAGE: cmd [-c|-s][-e|-r][-u][-n ##][-l ##]\n");
+          utilisation_message();
           exit(1);
         }
         emetteur = 0;
@@ -106,7 +107,7 @@ void main (int argc, char **argv) {
         break;
 
       default:
-        printf("USAGE: cmd [-c|-s][-e|-r][-u][-n ##][-l ##]\n");
+        utilisation_message();
         break;
 		}
 	}
@@ -127,7 +128,7 @@ void main (int argc, char **argv) {
     }
 
     if(client == -1) {
-      printf("USAGE: cmd [-c|-s][-e|-r][-u][-n ##][-l ##]\n");
+      utilisation_message();
       exit(1);
     }
 
@@ -154,12 +155,12 @@ void main (int argc, char **argv) {
         if(nb_message == -1) {
           nb_message = 10;
         }
-        printf("SERVEUR: lg_mesg_emis=%d, port=%d, nb_envois=%d, TP=%s\n", lg_message, port, nb_message, text_type, addr);
+        printf("SERVEUR: lg_mesg_emis=%d, port=%d, nb_envois=%d, TP=%s\n", lg_message, port, nb_message, text_type);
       } else if(emetteur == 0) {
         if(nb_message == -1)
-          printf("SERVEUR: lg_mesg_lu=%d, port=%d, nb_receptions=infini, TP=%s\n", lg_message, port, text_type, addr);
+          printf("SERVEUR: lg_mesg_lu=%d, port=%d, nb_receptions=infini, TP=%s\n", lg_message, port, text_type);
         else
-          printf("SERVEUR: lg_mesg_lu=%d, port=%d, nb_receptions=%d, TP=%s\n", lg_message, port, nb_message, text_type, addr);
+          printf("SERVEUR: lg_mesg_lu=%d, port=%d, nb_receptions=%d, TP=%s\n", lg_message, port, nb_message, text_type);
       }
     }
 
